@@ -112,7 +112,7 @@ async function test() {
 }
 
 exports.scheduledFunction = functions.pubsub
-  .schedule('30 9 * * *')
+  .schedule('45 7 * * *')
   .timeZone('America/New_York')
   .onRun(context => {
     return main();
