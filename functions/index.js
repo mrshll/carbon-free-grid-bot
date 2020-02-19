@@ -118,5 +118,5 @@ exports.scheduledFunction = functions.pubsub
     return main();
   });
 
-main();
-// test();
+// main();
+test();
