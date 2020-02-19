@@ -1,5 +1,5 @@
-const functions = require('firebase-functions');
 const bent = require('bent');
+const moment = require('moment');
 
 const config = require('./config.json');
 
@@ -33,7 +33,12 @@ const getSeriesUrl = seriesId => {
   return `http://api.eia.gov/series/?api_key=${eiaApiKey}&series_id=${seriesId}`;
 };
 
-async function sumGenerationBySource(categoryId, filterFn = _ => true) {
+const addQueryParamsForDate = (url, date) => {
+  const dateString = moment(date).format('YYYYMMDD');
+  return `${url}&start=${dateString}T00-00&end=${dateString}T23-59`;
+};
+
+async function sumGenerationBySource(categoryId, date) {
   getJSON = bent('json');
   const url = getCategoryUrl(categoryId);
   const hourlyGenerationSeriesIdsBySource = await getJSON(url);
@@ -52,9 +57,15 @@ async function sumGenerationBySource(categoryId, filterFn = _ => true) {
     const source = sourceRe.exec(name)[0];
 
     let seriesUrl = getSeriesUrl(seriesId);
+    if (date) {
+      seriesUrl = addQueryParamsForDate(seriesUrl, date);
+      console.log(seriesUrl);
+    }
     const seriesData = await getJSON(seriesUrl);
     const {data} = seriesData.series[0];
-    const yesterdaySum = data.filter(filterFn).reduce((sum, d) => sum + d[1], 0);
+    const yesterdaySum = data.reduce((sum, d) => sum + d[1], 0);
+
+    console.log(source, yesterdaySum, data);
 
     generationSumBySource[source] = yesterdaySum;
   }

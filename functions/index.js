@@ -26,10 +26,9 @@ function getYesterdayDate() {
 
 async function getData(categoryId) {
   const yesterdayDate = getYesterdayDate();
+  console.log(yesterdayDate);
 
-  const yesterdaySumBySource = await sumGenerationBySource(categoryId, d =>
-    d[0].startsWith(yesterdayDate)
-  );
+  const yesterdaySumBySource = await sumGenerationBySource(categoryId, yesterdayDate);
   const lowCarbonTotal = LOW_CARBON_SOURCES.reduce(
     (sum, source) => sum + (yesterdaySumBySource[source] || 0),
     0
@@ -112,11 +111,17 @@ async function test() {
 }
 
 exports.scheduledFunction = functions.pubsub
-  .schedule('45 7 * * *')
+  .schedule('30 10 * * *')
   .timeZone('America/New_York')
   .onRun(context => {
     return main();
   });
 
-// main();
-test();
+async function testGetData() {
+  const data = await getData(US_CATEGORY_ID);
+  console.log(data);
+}
+
+main();
+// test();
+// testGetData();
