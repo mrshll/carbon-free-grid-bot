@@ -8,11 +8,22 @@ const T = new Twitter({
   timeout_ms: 60 * 1000,
 });
 
-function sendTweet(tweetText) {
+function sendTweet(tweet, options = {}) {
   // Post a tweet
-  T.post('statuses/update', {status: tweetText}, (err, data) => {
-    console.log(err, data);
-  });
+  return T.post('statuses/update', {status: tweet, ...options});
+}
+
+async function sendTweetThread(tweets) {
+  let prevTweetId = null;
+  for (const tweet of tweets) {
+    let options = {};
+    if (prevTweetId) {
+      options.in_reply_to_status_id = prevTweetId;
+    }
+    const response = await sendTweet(tweet, options);
+    prevTweetId = response.id_str;
+  }
 }
 
 exports.sendTweet = sendTweet;
+exports.sendTweetThread = sendTweetThread;
