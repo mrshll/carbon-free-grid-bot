@@ -46,13 +46,13 @@ async function makeNationalTweets() {
   const highCarbonPercent = 100 - lowCarbonPercent;
   const highCarbonBar = makeBar(100 - lowCarbonPercent);
 
-  let totalTweetText = `Energy generation yesterday (${moment(getYesterdayDate()).format(
+  let totalTweetText = `U.S. generation yesterday (${moment(getYesterdayDate()).format(
     'MMM D'
   )}) was\n`;
   totalTweetText += `🏭 ${highCarbonBar} ${highCarbonPercent.toFixed(PRECISION)}% high-carbon\n`;
   totalTweetText += `🌱 ${lowCarbonBar} ${lowCarbonPercent.toFixed(PRECISION)}% low-carbon`;
 
-  let sourceBreakdownTweetText = `Generation breakdown by source:`;
+  let sourceBreakdownTweetText = `U.S. generation breakdown by source:`;
   const sortedSources = Object.keys(yesterdaySumBySource)
     .sort((sourceA, sourceB) => yesterdaySumBySource[sourceA] - yesterdaySumBySource[sourceB])
     .reverse();
@@ -111,7 +111,7 @@ async function test() {
 }
 
 exports.scheduledFunction = functions.pubsub
-  .schedule('30 10 * * *')
+  .schedule('30 12 * * *')
   .timeZone('America/New_York')
   .onRun(context => {
     return main();
@@ -123,5 +123,5 @@ async function testGetData() {
 }
 
 // main();
-test();
+// test();
 // testGetData();
