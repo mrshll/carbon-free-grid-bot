@@ -26,7 +26,6 @@ function getYesterdayDate() {
 
 async function getData(categoryId) {
   const yesterdayDate = getYesterdayDate();
-  console.log(yesterdayDate);
 
   const yesterdaySumBySource = await sumGenerationBySource(categoryId, yesterdayDate);
   const lowCarbonTotal = LOW_CARBON_SOURCES.reduce(
@@ -49,8 +48,9 @@ async function makeNationalTweets() {
   let totalTweetText = `U.S. generation yesterday (${moment(getYesterdayDate()).format(
     'MMM D'
   )}) was\n`;
-  totalTweetText += `🏭 ${highCarbonBar} ${highCarbonPercent.toFixed(PRECISION)}% high-carbon\n`;
-  totalTweetText += `🌱 ${lowCarbonBar} ${lowCarbonPercent.toFixed(PRECISION)}% low-carbon`;
+  totalTweetText += `🏭 ${highCarbonBar} ${highCarbonPercent.toFixed(PRECISION)}% high-carbon (${(total - lowCarbonTotal).toLocaleString('en-US', {maximumFractionDigits:0})} MWh)\n`;
+  totalTweetText += `🌱 ${lowCarbonBar} ${lowCarbonPercent.toFixed(PRECISION)}% low-carbon (${lowCarbonTotal.toLocaleString('en-US', {maximumFractionDigits:0})} MWh)\n\n`;
+  totalTweetText += `Total generation: ${total.toLocaleString('en-US', {maximumFractionDigits:0})} MWh`
 
   let sourceBreakdownTweetText = `U.S. generation breakdown by source:`;
   const sortedSources = Object.keys(yesterdaySumBySource)
@@ -123,5 +123,5 @@ async function testGetData() {
 }
 
 // main();
-// test();
+test();
 // testGetData();

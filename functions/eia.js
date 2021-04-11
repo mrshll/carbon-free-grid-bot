@@ -59,13 +59,10 @@ async function sumGenerationBySource(categoryId, date) {
     let seriesUrl = getSeriesUrl(seriesId);
     if (date) {
       seriesUrl = addQueryParamsForDate(seriesUrl, date);
-      console.log(seriesUrl);
     }
     const seriesData = await getJSON(seriesUrl);
     const {data} = seriesData.series[0];
     const yesterdaySum = data.reduce((sum, d) => sum + d[1], 0);
-
-    console.log(source, yesterdaySum, data);
 
     generationSumBySource[source] = yesterdaySum;
   }
