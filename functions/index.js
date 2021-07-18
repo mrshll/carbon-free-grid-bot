@@ -122,6 +122,6 @@ async function testGetData() {
   console.log(data);
 }
 
-// main();
-test();
+main();
+// test();
 // testGetData();
