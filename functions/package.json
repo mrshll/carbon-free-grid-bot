@@ -16,7 +16,7 @@
     "firebase-functions": "^3.3.0",
     "ascii-progress": "^1.0.5",
     "bent": "^7.0.6",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "twitter": "^1.7.1"
   },
   "devDependencies": {
